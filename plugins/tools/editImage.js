@@ -1,12 +1,13 @@
 import axios from 'axios';
 import FormData from 'form-data';
+import sharp from 'sharp';
 
 const client = axios.create({
   baseURL: 'https://emam-api-test.vercel.app/home/sections/Tools/api/imageEditPro'
 });
 
 const validRatios = ["1:1", "16:9", "3:2", "2:3", "4:5", "5:4", "9:16", "3:4", "4:3", "custom"];
-// upload image in imgbb
+
 async function uploadToImgbb(buffer) {
   const formData = new FormData();
   formData.append('source', buffer, { filename: `image-${Date.now()}.jpg` });
@@ -30,6 +31,10 @@ async function uploadToImgbb(buffer) {
   return response.image.url;
 }
 
+async function convertWebpToJpeg(buffer) {
+  return await sharp(buffer).jpeg().toBuffer();
+}
+
 let handler = async (m, { conn, text }) => {
   if (!text) return m.reply("النص الي هنفذو\nمثال: .صوره-تعديل اجعل لون البشرة اسود|1:1");
   if (!m.quoted || !m.quoted.mimetype || !m.quoted.mimetype.includes('image')) {
@@ -42,7 +47,12 @@ let handler = async (m, { conn, text }) => {
     let [prompt, size] = text.split('|');
     if (!prompt) prompt = text;
 
-    const buffer = await m.quoted.download();
+    let buffer = await m.quoted.download();
+    
+    if (m.quoted.mimetype === 'image/webp') {
+      buffer = await convertWebpToJpeg(buffer);
+    }
+    
     const imageUrl = await uploadToImgbb(buffer);
     
     const payload = {
