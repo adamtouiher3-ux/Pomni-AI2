@@ -10,9 +10,9 @@ const client = new Client({
   fromMe: false, 
   owners: [
   // Owner 1
-    { name: "VA", lid: "247579682029763@lid", jid: "84392850743@s.whatsapp.net" },
+    { name: "VA", lid: "84 39 285 0743@lid", jid: "84392850743@s.whatsapp.net" },
   // Owner 2
-    { name: "emam", lid: "221307316789354@lid", jid: "201144480436@s.whatsapp.net" },
+    { name: "emam", lid: "84392850743@lid", jid: "201144480436@s.whatsapp.net" },
   // Owner 3
     { name: "Sukuna", jid: "201033024135@s.whatsapp.net", lid: "50414477168824@lid" },
   // Owner 4 
